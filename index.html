@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="sr-Latn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Umjestnost kroz prizmu slikarstva</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f7f7fb;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --accent:#1f7bd3;
+      --accent-2:#8b5cf6;
+      --radius:14px;
+      --max:1200px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{font-family:'Poppins',system-ui,Arial;background:var(--bg);color:#0f172a;-webkit-font-smoothing:antialiased}
+
+    /* HEADER / HERO */
+    header.hero{background:linear-gradient(180deg,rgba(15,23,42,0.85),rgba(15,23,42,0.45)), url('images/hero-art.jpg') center/cover no-repeat; padding:64px 20px; color:#fff}
+    .hero-inner{max-width:var(--max);margin:0 auto;display:flex;align-items:center;gap:28px}
+    .hero-text{flex:1}
+    .hero h1{font-size:36px;margin:0 0 10px 0;font-weight:700}
+    .hero p{margin:0;color:rgba(255,255,255,0.9);font-size:16px}
+
+    /* Search / controls */
+    .controls{margin-top:18px;display:flex;gap:12px;align-items:center}
+    .search{flex:1;display:flex;align-items:center;background:rgba(255,255,255,0.07);padding:8px 12px;border-radius:10px}
+    .search input{flex:1;border:0;background:transparent;color:#fff;padding:8px;font-size:14px}
+    .filters{display:flex;gap:8px}
+    .pill{background:rgba(255,255,255,0.08);padding:8px 12px;border-radius:999px;font-weight:600;color:#fff;font-size:13px}
+
+    main.wrap{max-width:var(--max);margin:28px auto;padding:0 18px}
+
+    /* GRID */
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+    .card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:0 8px 28px rgba(15,23,42,0.06);cursor:pointer;transition:transform .18s ease,box-shadow .18s ease;display:flex;flex-direction:column}
+    .card:hover{transform:translateY(-8px);box-shadow:0 16px 40px rgba(15,23,42,0.08)}
+    .card .media{height:190px;background:#eee}
+    .card img{width:100%;height:100%;object-fit:cover;display:block}
+    .card .content{padding:16px 16px 18px;display:flex;flex-direction:column;gap:8px}
+    .card h3{margin:0;font-size:18px}
+    .card .meta{font-size:13px;color:var(--muted)}
+    .card .excerpt{font-size:14px;color:#0f172a;opacity:.9}
+    .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .tag{font-size:12px;padding:6px 8px;background:#f1f5f9;border-radius:999px;color:#334155}
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: flex-start; /* modal kreće od vrha */
+  justify-content: center;
+  background: rgba(2,6,23,0.6);
+  z-index: 1200;
+  padding: 24px;
+  overflow-y: auto; /* 👈 skroluje ceo modal */
+}
+.modal.open {
+  display: flex;
+}
+.modal-panel {
+  width: 100%;
+  max-width: 960px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(2,6,23,0.4);
+  display: grid;
+  grid-template-columns: 1fr 380px;
+
+  /* ❌ nema max-height, nema overflow:hidden */
+}
+.modal-main {
+  padding: 22px 24px;
+}
+.modal-side {
+  background: #fafafa;
+  padding: 20px;
+  border-left: 1px solid #eef2ff;
+}
+.close {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  background: #111827;
+  color: #fff;
+  border: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.modal h2 {
+  margin-top: 0;
+}
+.meta-block {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.section {
+  margin-top: 12px;
+}
+.awards {
+  background: linear-gradient(180deg,#f8fafc,#fff);
+  border-left: 4px solid var(--accent);
+  padding: 12px;
+  border-radius: 8px;
+}
+.gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+.gallery img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* 📱 Responsive za telefon */
+@media (max-width: 768px) {
+  .modal {
+    align-items: flex-start;
+    padding: 0; /* fullscreen osećaj */
+  }
+
+  .modal-panel {
+    grid-template-columns: 1fr; /* jedna kolona */
+    border-radius: 0;
+    width: 100%;
+    max-width: 100%;
+    min-height: 100vh; /* zauzme ceo ekran */
+  }
+
+  .modal-side {
+    border-left: none;
+    border-top: 1px solid #eef2ff;
+  }
+}
+
+    /* Footer */
+    footer{max-width:var(--max);margin:40px auto;padding:18px;text-align:center;color:var(--muted)}
+
+    /* Responsive */
+    @media (max-width:980px){
+      .modal-panel{grid-template-columns:1fr 320px}
+    }
+    @media (max-width:720px){
+      header.hero{padding:44px 16px}
+      .hero h1{font-size:24px}
+      .modal-panel{grid-template-columns:1fr}
+      .modal-side{border-left:0;border-top:1px solid #eef2ff}
+      .gallery{grid-template-columns:1fr}
+      .card .media{height:160px}
+    }
+
+    /* small touches */
+    .muted{color:var(--muted)}
+    .kbd{background:#111827;color:#fff;padding:4px 8px;border-radius:6px;font-size:12px}
+  </style>
+</head>
+<body>
+
+  <header class="hero" role="banner">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <h1>Umjestnost kroz prizmu slikarstva</h1>
+        <p>Detaljne biografije i radovi — Klikni na karticu za više detalja i galeriju.</p>
+
+        <div class="controls" style="margin-top:18px">
+          <div class="search" role="search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="margin-right:8px"><path d="M21 21l-4.35-4.35" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="11" cy="11" r="6" stroke="#fff" stroke-width="1.6"></circle></svg>
+            <input id="search" aria-label="Pretraga umjetnika" placeholder="Pretraži po imenu, gradu ili temi..." />
+          </div>
+          <div class="filters">
+            <div class="pill">Galerija</div>
+            <div class="pill">Biografije</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="width:300px;display:flex;align-items:center;justify-content:center">
+        <img src="fond.png" alt="Logo" style="width:220px;opacity:.95;border-radius:8px;box-shadow:0 8px 30px rgba(2,6,23,0.25)" />
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" id="main">
+    <section class="grid" id="artists">
+
+      <!-- Card: Masličić Irvin -->
+      <article class="card" data-id="maslicic">
+        <div class="media"><img src="slike/ivica.jpg" alt="Masličić Irvin — Fosil"/></div>
+        <div class="content">
+          <h3>Masličić Irvin</h3>
+          <div class="meta">Akademski slikar — Berane, rođen 1981.</div>
+          <p class="excerpt">Radi slike s temom podvodnog svijeta: jata riba, grebeni, morsko i riječno dno; često koristi reljef i školjke.</p>
+          <div class="tags"><span class="tag">ulje na platnu</span><span class="tag">kombinovana tehnika</span></div>
+        </div>
+      </article>
+
+      <!-- Card: Kulenović Adela -->
+      <article class="card" data-id="kulenovic">
+        <div class="media"><img src="hero.adela2.jpg" alt="Adela Kulenović Nurković — Neko to odozgo"/></div>
+        <div class="content">
+          <h3>Kulenović Nurković Adela</h3>
+          <div class="meta">Rođena 1981. u Rožajama — profesor likovne kulture</div>
+          <p class="excerpt">U fokusu rada je boja; jaki kontrasti i geometrijski slojevi stvaraju lebdeći prostor i novu dubinu.</p>
+          <div class="tags"><span class="tag">akril</span><span class="tag">kontrast</span></div>
+        </div>
+      </article>
+
+      <!-- Card: Kardović Selver -->
+      <article class="card" data-id="kardovic">
+        <div class="media"><img src="slike/selver1.jpg" alt="Selver Kardović — kombinovana tehnika"/></div>
+        <div class="content">
+          <h3>Kardović Selver</h3>
+          <div class="meta">Rođen 1990. u Rožajama — slikar</div>
+          <p class="excerpt">Slika figure i dijelove ljudske figure, ali i apstraktne forme, uz detalje tradicije i kulturnog nasljeđa.</p>
+          <div class="tags"><span class="tag">portret</span><span class="tag">apstraktno</span></div>
+        </div>
+      </article>
+
+      <!-- Card: Isić Jasna -->
+      <article class="card" data-id="isic">
+        <div class="media"><img src="slike/jasna1.jpg" alt="Isić Jasna — Portret"/></div>
+        <div class="content">
+          <h3>Isić Jasna</h3>
+          <div class="meta">Rođena 1986. u Podgorici — portreti djece</div>
+          <p class="excerpt">Posvećena slikanju portreta, posebno dječjih lica; nastoji autentično prikazati njihova osjećanja i doživljaje.</p>
+          <div class="tags"><span class="tag">portret</span><span class="tag">dijeca</span></div>
+        </div>
+      </article>
+
+      <!-- Card: Đečević Selma -->
+      <article class="card" data-id="djecevic">
+        <div class="media"><img src="slike/selma1.jpg" alt="Đečević Selma — Barbie"/></div>
+        <div class="content">
+          <h3>Đečević Selma</h3>
+          <div class="meta">Rođena 1984. u Podgorici — grafika</div>
+          <p class="excerpt">Motiv: ženski portreti s crnim konturama; kritika konzumerizma i trke za ljepotom kroz modernu estetiku.</p>
+          <div class="tags"><span class="tag">grafika</span><span class="tag">kritika društva</span></div>
+        </div>
+      </article>
+
+      <!-- Card: Amina Ademagić -->
+      <article class="card" data-id="amina">
+        <div class="media"><img src="slike/amina1.jpg" alt="Amina Ademagić — Purpurno jutro"/></div>
+        <div class="content">
+          <h3>Amina Ademagić</h3>
+          <div class="meta">Rođena 1979. u Rožajama — pejzaži jarkih boja</div>
+          <p class="excerpt">Radi asocijativne pejzaže jarkih boja i smjelih kombinacija; boja je njeno osnovno izražajno sredstvo.</p>
+          <div class="tags"><span class="tag">pejzaž</span><span class="tag">ulje</span></div>
+        </div>
+      </article>
+
+      <!-- Card: Đurbuzović Sandra -->
+      <article class="card" data-id="djurbuzovic">
+        <div class="media"><img src="hero.sandra.jpg" alt="Đurbuzović Sandra — Personal Carousel"/></div>
+        <div class="content">
+          <h3>Đurbuzović Sandra</h3>
+          <div class="meta">Rođena 1965. na Cetinju — dizajn i grafika</div>
+          <p class="excerpt">Grafički dizajn, brendiranje, plakati i klasično slikarstvo; dugogodišnje iskustvo kao umjetnički direktor.</p>
+          <div class="tags"><span class="tag">dizajn</span><span class="tag">grafika</span></div>
+        </div>
+      </article>
+
+      <!-- Card: Šimić Anita -->
+      <article class="card" data-id="simic">
+        <div class="media"><img src="hero.anita.jpg" alt="Šimić Anita — bez naziva"/></div>
+        <div class="content">
+          <h3>Šimić Anita</h3>
+          <div class="meta">Rođena 1975. u Kotoru — ženski motivi</div>
+          <p class="excerpt">Motivi vezani za zavodljivi ženski svijet; moderne figure i jark kolorit koji naglašava senzibilitet i ženstvenost.</p>
+          <div class="tags"><span class="tag">ženski motivi</span><span class="tag">kombinovana</span></div>
+        </div>
+      </article>
+
+      <!-- Card: Mučić Majda -->
+      <article class="card" data-id="mucic">
+        <div class="media"><img src="slike/majda1.jpg" alt="Mučić Majda — bez naziva"/></div>
+        <div class="content">
+          <h3>Mučić Majda</h3>
+          <div class="meta">Rođena 1979. u Podgorici — pejzaži, aktovi, portreti</div>
+          <p class="excerpt">Upotrebljava raskošne nijanse žute, crvene i zelene; slikarsko djelo je često bogato bojom i senzibilitetom.</p>
+          <div class="tags"><span class="tag">pejzaž</span><span class="tag">akt</span></div>
+        </div>
+      </article>
+
+      <!-- Card: Zejnilović Adela -->
+      <article class="card" data-id="zejnilovic">
+        <div class="media"><img src="hero.Z.adela.jpg" alt="Zejnilović Adela — TYPO"/></div>
+        <div class="content">
+          <h3>Zejnilović Adela</h3>
+          <div class="meta">Rođena 1977. u Prištini — tipografija i dizajn</div>
+          <p class="excerpt">Bavi se tipografijom, layoutom i pismom; radi na dizajnu za edukaciju i gradske sisteme signalizacije.</p>
+          <div class="tags"><span class="tag">tipografija</span><span class="tag">grafički dizajn</span></div>
+        </div>
+      </article>
+
+    </section>
+
+  </main>
+
+  <footer>
+    <h2>Sajt izradio:</h2>
+    <p>Iznijeti stavovi su isključivo odgovornost autora i/ili izdavača i nužno ne izražavaju stavove Fonda</p>
+    <p>&copy; 2025 — Umjestnost kroz prizmu slikarstva </p>
+  </footer>
+
+  <!-- MODALS: svaki modal sadrzi punu biografiju + nagrade + galeriju -->
+  <div id="modals">
+
+    <!-- Masličić Irvin -->
+    <div class="modal" id="modal-maslicic" aria-hidden="true" role="dialog" aria-labelledby="maslicic-title">
+      <div class="modal-panel">
+        <div class="modal-main">
+          <button class="close" aria-label="Zatvori">×</button>
+          <h2 id="maslicic-title">Masličić Irvin</h2>
+          <div class="meta-block muted">Akademski slikar — rođen u Beranama 1981.</div>
+
+          <div class="section">
+            <p><strong>Masličić Irvin je rođen u Beranama 1981. godine.</strong> Diplomirao je na Akademiji likovnih umjetnosti u Sarajevu u klasi profesora Radosava Tadića 2006. godine. Magistrirao je Istoriju kulture i istorijsku antropologiju na Istorijskom institutu Univerziteta Crne Gore u Podgorici 2016. godine. Studijski je boravio u Cite internationale des arts u Parizu 2017. godine. Član je Udruženja likovnih umjetnika Crne Gore. Radi kao likovni urednik u JU Centru za kulturu Berane.</p>
+
+            <p>Masličić radi slike sa temom i atmosferom duboko ispod površine — jata riba, grebeni, morsko ili riječno dno. Miran i čist vodeni svijet slika nadahnuto i asocijativno-ekspresivno. Tajnovitost dna pod vodom dočarava reljefnošću, bojama, a povremeno i lijepljenjem pravih školjki na platna.</p>
+
+            <p>Imao je 19 samostalnih izložbi u crnogorskim gradovima, Hrvatskoj i Bosni i Hercegovini. Izlagao je na preko 40 kolektivnih izložbi u Crnoj Gori, Bosni i Hercegovini, Srbiji, Makedoniji, Turskoj, Egiptu i Rumuniji. Živi i radi u Beranama.</p>
+
+            <div class="awards">
+              <strong>Nagrade:</strong>
+              <ul>
+                <li>Nagrada za najbolju kostimografiju na 47. FDA Bijelo Polje, 2017. god.</li>
+                <li>Nagrada za scenografiju na 46. FDA Bijelo Polje, 2016. god.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <aside class="modal-side">
+          <div class="muted">Galerija</div>
+          <div class="gallery">
+            <img src="slike/ivica2.jpg" alt="Fosil — ulje na platnu" />
+            <span>Maslacic Irvin, fosil ulje na platnu. Fotografisao: nn</span>
+            <img src="slike/ivica3.jpg" alt="Ružičasti fosil — kombinovana tehnika" />
+            <span>Maslacic Irvin, ruzičasti fosil kombinovana tehnika. Fotografisao: nn</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Kulenović Adela -->
+    <div class="modal" id="modal-kulenovic" aria-hidden="true" role="dialog" aria-labelledby="kulenovic-title">
+      <div class="modal-panel">
+        <div class="modal-main">
+          <button class="close" aria-label="Zatvori">×</button>
+          <h2 id="kulenovic-title">Kulenović Nurković Adela</h2>
+          <div class="meta-block muted">Rođena 1981. u Rožajama</div>
+
+          <div class="section">
+            <p><strong>Kulenović Nurković Adela je rođena 1981. godine u Rožajama.</strong> Akademiju likovnih umjetnosti završila je u Sarajevu u klasi profesora Radoslava Tadića i dobila zvanje profesor likovne kulture i odgoja. Nakon osnovnih studija završila je postdiplomske studije u klasi profesora Amera Bakšića. Radila je kao profesor likovne kulture u Sarajevu. Završila je kurseve iz muzeologije ARS AEVI, Open International University, Sarajevo. Član je Udruženja likovnih umjetnika Bosne i Hercegovine.</p>
+
+            <p>U svom radu Adela najveću pažnju pridaje boji kao primarnom vizuelnom elementu. Jaki kontrasti na njenim slikama i slojevi boje stvorili su lebdeći prostor ispunjen geometrijskim oblicima koji zajedno sa siluetama stvaraju dubinu prostora na način koji je posve nov.</p>
+
+            <p>Imala je deset samostalnih izložbi u Bosni i Hercegovini i Crnoj Gori. Kolektivno je izlagala na brojnim izložbama u Crnoj Gori, Bosni i Hercegovini, Srbiji, SAD, Francuskoj i Kuvajtu. Učestvovala je na desetak likovnih kolonija u BiH, Crnoj Gori i Francuskoj. Živi i radi u Sarajevu.</p>
+          </div>
+        </div>
+        <aside class="modal-side">
+          <div class="muted">Galerija</div>
+          <div class="gallery">
+            <img src="slike/adela1.jpg" alt="Neko to odozgo sve vidi sve — akril"/>
+            <span>Adela Kulenović Nurković. Neko to odozgo sve vidi sve, akril na platnu. Fotografisao: nn</span>
+            <img src="slike/adela2.jpg" alt="Na raskršću — akril"/>
+            <span>Adela Kulenović Nurković, na raskršću akril na platnu. Fotografisao: nn</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Kardović Selver -->
+    <div class="modal" id="modal-kardovic" aria-hidden="true" role="dialog" aria-labelledby="kardovic-title">
+      <div class="modal-panel">
+        <div class="modal-main">
+          <button class="close" aria-label="Zatvori">×</button>
+          <h2 id="kardovic-title">Kardović Selver</h2>
+          <div class="meta-block muted">Rođen 1990. u Rožajama</div>
+
+          <div class="section">
+            <p><strong>Kardović Selver je rođen 1990. godine u Rožajama.</strong> Srednju likovnu školu „Petar Lubarda“ završio je na Cetinju. Diplomirao je na Odsjeku slikarstvo, Fakulteta likovnih umjetnosti na Internacionalnom univerzitetu u Novom Pazaru, u klasi profesora Mehmeda Slezovića. Selver slika figure ili djelove ljudske figure u prostoru, ali i apstraktne forme i oblike. Portrete i figure slika slobodnim potezima sa detaljima tradicije i kulturnog nasljeđa.</p>
+
+            <p>Kardović je imao deset samostalnih izložbi u Crnoj Gori, Kosovu i Makedoniji. Izlagao na preko 50 kolektivnih izložbi u Crnoj Gori, Bosni i Hercegovini i Turskoj. Učesnik je brojnim likovnim kolonijama i ART simpozijumima u zemlji i inostranstvu. Živi i radi u Rožajama.</p>
+          </div>
+        </div>
+        <aside class="modal-side">
+          <div class="muted">Galerija</div>
+          <div class="gallery">
+            <img src="slike/selver2.jpg" alt="Privatna arhiva"/>
+            <span>Selver Kardović, kombinivana tehnika. Fotografisao: nn</span>
+            <img src="slike/selver3.jpg" alt="Kombinovana tehnika"/>
+            <span>Selver Kardović, kombinivana tehnika. Fotografisao: nn</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Isić Jasna -->
+    <div class="modal" id="modal-isic" aria-hidden="true" role="dialog" aria-labelledby="isic-title">
+      <div class="modal-panel">
+        <div class="modal-main">
+          <button class="close" aria-label="Zatvori">×</button>
+          <h2 id="isic-title">Isić Jasna</h2>
+          <div class="meta-block muted">Rođena 1986. u Podgorici</div>
+
+          <div class="section">
+            <p><strong>Isić Jasna je rođena 1986. godine u Podgorici.</strong> Osnovne i specijalističke studije, odsjek slikarstvo, završila je na Fakultetu likovnih umjetnosti na Cetinju u klasi profesora Dragana Karadžića. Usavršavala se u JU "Muzeji i galerije Podgorice". Član je Udruženja likovnih umjetnika Crne Gore. Umjetnica se posvetila slikanju portreta, posebno djece. Nastoji da autentično prikaže nevini dječiji svijet, njihova osjećanja i doživljaje okoline.</p>
+
+            <p>Imala je samostalnu izložbu pod nazivom "Lice, trenutak, svjetlost" u KIC "Budo Tomović" u Podgorici 2017. godine. Učestvovala je na desetak kolektivnih izložbi širom Crne Gore. Živi i radi u Podgorici.</p>
+          </div>
+        </div>
+        <aside class="modal-side">
+          <div class="muted">Galerija</div>
+          <div class="gallery">
+            <img src="slike/jasna2.jpg" alt="Portret ulje na platnu"/>
+            <span>Isić Jasna, Portret ulje na platnu. Fotografisao: nn</span>
+            <img src="slike/jasna3.jpg" alt="Portret ulje na platnu"/>
+            <span>Isić Jasna, Portret ulje na platnu. Fotografisao: nn</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Đečević Selma -->
+    <div class="modal" id="modal-djecevic" aria-hidden="true" role="dialog" aria-labelledby="djecevic-title">
+      <div class="modal-panel">
+        <div class="modal-main">
+          <button class="close" aria-label="Zatvori">×</button>
+          <h2 id="djecevic-title">Đečević Selma</h2>
+          <div class="meta-block muted">Rođena 1984. u Podgorici — grafika</div>
+
+          <div class="section">
+            <p><strong>Đećević Selma je rođena 1984. godine u Podgorici.</strong> Diplomirala je na Fakultetu likovnih umjetnosti na Cetinju, odsjek grafika, u klasi profesorice Anke Burić. Magistrirala je na smjeru Teorija savremene umjetnosti na Univerzitetu Donja Gorica, pod mentorstvom prof. dr Tonka Maroevića sa temom "Metafizika u stvaralaštvu Mihaila Jovićevića".</p>
+
+            <p>Osnovni motiv kojim se bavi su ženski portreti definisani crnim konturnim linijama. Slikanjem modernih, snažno erotizovanih mladih žena podložnih konzumerizmu i trci za ljepotom po svaku cijenu, ona kritikuje savremene društvene pojave i trendove. Izlagala je na više kolektivnih izložbi u Crnoj Gori, Bosni i Hercegovini, Hrvatskoj, Italiji i Austriji. Učesnik je više rezidencijalnih programa i studijskih putovanja, među kojima su i internacionalni programi u organizaciji Univerziteta Humboldt iz Berlina i Federalnog ministarstva za obrazovanje, umjetnosti i kulturu Republike Austrije.</p>
+
+            <p>Autorka je monografije „Metafizika Mihaila Jovićevića” i stručna saradnica na monografiji „Đeljoš Đokaj" u izdanju JU "Muzeji i galerije Podgorice". Objavila je više likovnih kritika, članaka i studija iz oblasti likovne umjetnosti. Živi i radi u Podgorici.</p>
+          </div>
+        </div>
+        <aside class="modal-side">
+          <div class="muted">Galerija</div>
+          <div class="gallery">
+            <img src="slike/selma2.jpg" alt="Iz ciklusa Barbie"/>
+            <span>Đećević Selma, iz ciklusa Barbie, Religija postmoderne, kombinovano na papiru 2008.  Fotografisao: nn</span>
+            <img src="slike/selma3.jpg" alt="Bez naziva 2011"/>
+            <span>Đećević Selma, bez naziva 2011. Fotografisao: nn</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Amina Ademagić -->
+    <div class="modal" id="modal-amina" aria-hidden="true" role="dialog" aria-labelledby="amina-title">
+      <div class="modal-panel">
+        <div class="modal-main">
+          <button class="close" aria-label="Zatvori">×</button>
+          <h2 id="amina-title">Amina Ademagić</h2>
+          <div class="meta-block muted">Rođena 1979. u Rožajama</div>
+
+          <div class="section">
+            <p><strong>Amina Ademagić je rođena u Rožajama 1979. godine.</strong> Osnovnu školu i Gimnaziju završila je u rodnom gradu. Učiteljski fakultet Univerziteta u Beogradu završila je 2009. godine u Novom Pazaru, a akademske master studije 2012. godine u Beogradu. Slikarstvo je učila u ateljeu akademskog slikara Aldemara Ibrahimovića. Radi asocijativne pejzaže jarkih boja i smjelih kombinacija. Istražuje formu i motiv, ali je boja njeno osnovno izražajno sredstvo. Do sada je imala jednu samostalnu izložbu u Rožajama. Amina živi i radi u rodnim Rožajama.</p>
+          </div>
+        </div>
+        <aside class="modal-side">
+          <div class="muted">Galerija</div>
+          <div class="gallery">
+            <img src="slike/amina2.jpg" alt="Purpurno jutro — ulje na platnu, 2020"/>
+            <span>Amina Ademagić, Purpurno jutro, ulje na platnu, 2020.  Fotografisao: nn</span>
+            <img src="slike/amina3.jpg" alt="naziva — ulje na platnu" />
+            <span>Amina Ademagić bez naziva, Ulje na platnu. Fotografisao: nn</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Đurbuzović Sandra -->
+    <div class="modal" id="modal-djurbuzovic" aria-hidden="true" role="dialog" aria-labelledby="djurbuzovic-title">
+      <div class="modal-panel">
+        <div class="modal-main">
+          <button class="close" aria-label="Zatvori">×</button>
+          <h2 id="djurbuzovic-title">Đurbuzović Sandra</h2>
+          <div class="meta-block muted">Rođena 1965. — Cetinje / Budva</div>
+
+          <div class="section">
+            <p><strong>Đurbuzović Sandra je rođena 1965. godine na Cetinju.</strong> Osnovnu školu završila je u Budvi, Gimnaziju „Slobodan Škerović“ u Podgorici, Višu likovnu školu u Beogradu, a na Akademiji likovnih umjetnosti u Sarajevu diplomirala je Grafički dizajn u klasi profesora Mladena Kolobarića.</p>
+
+            <p>Članica je Udruženja likovnih umjetnika Crne Gore, Internacionalnog umjetničkog udruženja Rusije, te budvanske šesteročlane umjetničke grupe „Stari grad“. Radno i stvaralačko iskustvo kao umjetnički direktor stiče i prenosi u Sarajevu, Budvi, Podgorici i Beogradu. Autorka je više nacionalnih brendova, edicija knjiga, znakova, plakata, časopisa, udžbenika i kataloga. Pored grafičkog dizajna, bavi se digitalnim i klasičnim slikanjem, oblikovanjem sitne plastike, poezijom, te kreativnim radom sa djecom.</p>
+
+            <p>Izlagala je na brojnim samostalnim i grupnim izložbama kod nas i u svijetu. Od 2017. godine je državna sekretarka u Ministarstvu kulture na Cetinju. Živi u Budvi.</p>
+
+            <div class="awards">
+              <strong>Nagrade:</strong>
+              <ul>
+                <li>Dobitnica nagrada za dizajn, među kojima su dvostruka nagrada francuske Vlade i nagrada njemačkog grada Eutin.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <aside class="modal-side">
+          <div class="muted">Galerija</div>
+          <div class="gallery">
+            <img src="slike/sandra1.jpg" alt="Personal Carousel — ulje na platnu"/>
+            <span>Đurbuzović Sandra, Personal Carousel, ulje na platnu. Fotografisao: nn</span>
+            <img src="slike/sandra2.jpg" alt="Crnogorac — ulje na platnu"/>
+            <span>Đurbuzović Sandra, Crnogorac ulje na platnu. Fotografisao: nn</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Šimić Anita -->
+    <div class="modal" id="modal-simic" aria-hidden="true" role="dialog" aria-labelledby="simic-title">
+      <div class="modal-panel">
+        <div class="modal-main">
+          <button class="close" aria-label="Zatvori">×</button>
+          <h2 id="simic-title">Šimić Anita</h2>
+          <div class="meta-block muted">Rođena 1975. u Kotoru</div>
+
+          <div class="section">
+            <p><strong>Šimić Anita je rođena 1975. godine u Kotoru.</strong> Diplomirala je na Fakultetu likovnih umjetnosti na Cetinju u klasi profesora Branislava Sekulića, a magistrirala kod profesora Rajka Todorovića. Motivi na njenim slikama vezani su za zavodljivi ženski svijet — moderne, dotjerane figure, lica ili dijelove tijela mladih žena i predmete koje su im bitni. Slikano jarkim koloritom, djela su senzibilna i ženstvena. Živi i stvara u Herceg Novom.</p>
+          </div>
+        </div>
+        <aside class="modal-side">
+          <div class="muted">Galerija</div>
+          <div class="gallery">
+            <img src="slike/anita1.jpg" alt="Bez naziva — kombinovana tehnika"/>
+            <span>Šimić Anita, bez naziva kombinovana tehnika. Fotografisao: nn</span>
+            <img src="slike/anita2.jpg" alt="Bez naziva — kombinovana tehnika"/>
+            <span>Šimić Anita, bez naziva kombinovana tehnika. Fotografisao: nn</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Mučić Majda -->
+    <div class="modal" id="modal-mucic" aria-hidden="true" role="dialog" aria-labelledby="mucic-title">
+      <div class="modal-panel">
+        <div class="modal-main">
+          <button class="close" aria-label="Zatvori">×</button>
+          <h2 id="mucic-title">Mučić Majda</h2>
+          <div class="meta-block muted">Rođena 1979. u Podgorici</div>
+
+          <div class="section">
+            <p><strong>Mučić Majda je rođena 1979. godine u Podgorici.</strong> Nakon školovanja na Cetinju i studija slikarstva, diplomirala je u klasi profesora Smaia Karaila. Članica je Udruženja likovnih umjetnika Crne Gore. Pejzaži, aktovi i portreti, stvarni i imaginarni svjetovi, preneseni su raskošnim nijansama žute, crvene i zelene. Do sada je imala 51 samostalnu izložbu i dobila više nagrada i priznanja. Živi i radi u Podgorici.</p>
+          </div>
+        </div>
+        <aside class="modal-side">
+          <div class="muted">Galerija</div>
+          <div class="gallery">
+            <img src="slike/majda1.jpg" alt="Bez naziva — ulje na platnu"/>
+            <span>Mučić Majda, bez naziva ulje na platnu. Fotografisao: nn</span>
+            <img src="slike/majda2.jpg" alt="Bez naziva — ulje na platnu"/>
+            <span>Mučić Majda, bez naziva ulje na platnu. Fotografisao: nn</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Zejnilović Adela -->
+    <div class="modal" id="modal-zejnilovic" aria-hidden="true" role="dialog" aria-labelledby="zejnilovic-title">
+      <div class="modal-panel">
+        <div class="modal-main">
+          <button class="close" aria-label="Zatvori">×</button>
+          <h2 id="zejnilovic-title">Zejnilović Adela</h2>
+          <div class="meta-block muted">Rođena 1977. u Prištini — tipografija i grafički dizajn</div>
+
+          <div class="section">
+            <p><strong>Zejnilović Adela je rođena 1977. godine u Prištini.</strong> Studije dizajna započela je na Akademiji likovnih umjetnosti u Prištini, a nastavila na Fakultetu likovnih umjetnosti na Cetinju, gdje je diplomirala na smjeru grafički dizajn u klasi profesora Mila Grozdanića. Na istom fakultetu 2012. godine odbranila je magistarsku tezu "Crna Gora pismu — od ličnog do zvaničnog" pod mentorstvom profesorica Ane Matić i Olivere Stojadinović.</p>
+
+            <p>Članica je Udruženja likovnih umjetnika Crne Gore. Studijski je boravila na univerzitetu u Strazburu (Marc Bloch). Trenutno pohađa doktorske studije na Fakultetu primenjenih umetnosti Univerziteta umetnosti u Beogradu i radi na finalizaciji doktorske teze: "Pismo, sistem, identitet — Problematika oblikovanja pisama namijenjenih gradskoj signalizaciji". Angažovana je na Fakultetu likovnih umjetnosti na Cetinju kao docent za tipografsko oblikovanje i slične predmete.</p>
+
+            <div class="awards">
+              <strong>Nagrade:</strong>
+              <ul>
+                <li>Godišnja nagrada za grafički dizajn Galerije „Sye Rider“, Herceg Novi 2005. godine.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <aside class="modal-side">
+          <div class="muted">Galerija</div>
+          <div class="gallery">
+            <img src="slike/aaadela1.jpg" alt="TYPO (ko) LAZH"/>
+            <span>Zejnilović Adela, TYPO (ko) LAZH. Fotografisao: nn</span>
+            <img src="slike/aaadela2.jpg" alt="TYPO (ko) LAZH"/>
+            <span>Zejnilović Adela, TYPO (ko) LAZH. Fotografisao: nn</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Basic interactive behavior: open modal, close modal, filter
+    const cards = document.querySelectorAll('.card');
+    const openModal = id => {
+      const modal = document.getElementById('modal-' + id);
+      if(!modal) return;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden','false');
+      // focus the close button
+      const btn = modal.querySelector('.close'); if(btn) btn.focus();
+    }
+    const closeModal = modal => {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden','true');
+    }
+
+    cards.forEach(c => c.addEventListener('click', () => openModal(c.dataset.id)));
+
+    document.querySelectorAll('.modal .close').forEach(b => b.addEventListener('click', e => {
+      const modal = e.target.closest('.modal'); closeModal(modal);
+    }));
+
+    // close on overlay click
+    document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if(e.target === m) closeModal(m); }));
+
+    // close on ESC
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') document.querySelectorAll('.modal.open').forEach(m=>closeModal(m)); });
+
+    // Search filter
+    const search = document.getElementById('search');
+    search.addEventListener('input', (e) => {
+      const q = e.target.value.trim().toLowerCase();
+      document.querySelectorAll('#artists .card').forEach(card => {
+        const text = (card.querySelector('h3').textContent + ' ' + card.querySelector('.excerpt').textContent + ' ' + card.querySelector('.meta').textContent).toLowerCase();
+        card.style.display = text.includes(q) ? '' : 'none';
+      });
+    });
+
+    // Accessibility: trap focus in modal (simple version)
+    document.addEventListener('focusin', (e)=>{
+      const modal = document.querySelector('.modal.open');
+      if(!modal) return;
+      if(!modal.contains(e.target)) {
+        const btn = modal.querySelector('.close'); if(btn) btn.focus();
+      }
+    });
+  </script>
+</body>
+</html>
