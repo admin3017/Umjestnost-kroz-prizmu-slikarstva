@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="bs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Javni poziv — Umjetnost kroz prizmu slikarstva</title>
+  <style>
+    /* Dokument-style page */
+    :root{--page-width:900px;--gutter:40px;--accent:#222}
+    html,body{height:100%;margin:0;background:#f3f3f3;font-family: Georgia, 'Times New Roman', Times, serif;color:var(--accent)}
+    .paper-wrap{display:flex;justify-content:center;padding:40px 20px}
+    .paper{background:linear-gradient(180deg,#fff,#fff);width:var(--page-width);padding:48px var(--gutter);box-shadow:0 8px 30px rgba(0,0,0,0.12);border:1px solid rgba(0,0,0,0.06)}
+    header{text-align:center;margin-bottom:28px}
+    h1{letter-spacing:2px;margin:0 0 8px;font-size:28px}
+    .subtitle{font-size:13px;margin-top:6px;color:#333}
+
+    .meta{margin:18px 0 26px}
+    .section-title{font-weight:700;margin:20px 0 8px}
+    p{margin:10px 0;line-height:1.55;font-size:16px}
+    ul{margin:8px 0 16px 1.4rem}
+    li{margin:6px 0}
+
+    .contact{background:#fafafa;padding:14px;border-left:4px solid #ddd;margin-top:12px}
+
+    .footer{margin-top:36px;font-size:13px;color:#444}
+    .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+    .btn{appearance:none;border:1px solid #888;padding:8px 12px;border-radius:6px;background:white;cursor:pointer;font-family:inherit}
+
+    /* Print-friendly */
+    @media print{
+      body,html{background:white}
+      .paper{box-shadow:none;border:none;width:100%;padding:18mm}
+      .actions{display:none}
+    }
+
+    /* Mobile adjustments */
+    @media (max-width:680px){
+      .paper{width:100%;padding:24px}
+      h1{font-size:22px}
+    }
+  </style>
+</head>
+<body>
+  <div class="paper-wrap">
+    <article class="paper" role="article">
+      <header>
+        <h1>JAVNI POZIV</h1>
+        <div class="subtitle">Za prijavu mladih slikara bošnjačke nacionalnosti radi učešća na internet platformi<br>"Umjetnost kroz prizmu slikarstva"</div>
+      </header>
+
+      <section class="meta">
+        <h2 class="section-title">Cilj poziva</h2>
+        <p>Cilj javnog poziva je promocija i afirmacija mladih likovnih stvaralaca bošnjačke nacionalnosti iz Crne Gore. Putem ovog poziva, odabrani učesnici dobiće priliku da njihovi radovi budu objavljeni i predstavljeni široj javnosti na web-platformi „Umjetnost kroz prizmu slikarstva“, koja je posvećena razvoju i podršci mladih umjetnika.</p>
+      </section>
+
+      <section>
+        <h2 class="section-title">Pravo učešća</h2>
+        <p>Pravo prijave imaju mladi autori bošnjačke nacionalnosti iz Crne Gore: starosne dobi od 14 do 45 godina, koji se bave slikarstvom, crtežom ili drugim likovnim tehnikama, koji do sada nisu imali značajniju priliku za javnu promociju svojih radova.</p>
+      </section>
+
+      <section>
+        <h2 class="section-title">Način prijave</h2>
+        <p>Zainteresovani kandidati treba da pošalju sljedeću dokumentaciju:</p>
+        <ul>
+          <li>kratku biografiju (ime i prezime, godina rođenja, mjesto prebivališta, kontakt telefon i e-mail adresu);</li>
+          <li>fotografije do tri svoja likovna rada (u formatu JPG ili PNG, minimalne rezolucije 1200x800 piksela);</li>
+          <li>kratak opis svakog rada (naziv, godina nastanka, tehnika i dimenzije);</li>
+        </ul>
+
+        <div class="contact">
+          <p>Dokumentaciju treba dostaviti putem e-mail na adresu: <a href="mailto:ernadmujevic58@gmail.com">ernadmujevic58@gmail.com</a><br>ili putem kontakt forme na sajtu: <a href="https://umjestnost-kroz-prizmu-slikarstva.online" target="_blank" rel="noopener">https://umjestnost-kroz-prizmu-slikarstva.online</a></p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="section-title">Rok za prijavu</h2>
+        <p>Javni poziv je otvoren od <strong>01. marta</strong> do <strong>30. maja 2025. godine</strong>.<br>Prijave pristigle nakon navedenog roka neće biti razmatrane.</p>
+      </section>
+
+      <div class="actions">
+        <button class="btn" onclick="window.print()">Štampaj / Sačuvaj kao PDF</button>
+        <button class="btn" onclick="location.href='index.html'">Vrati se na pocetnu stranu (zatvori)</button>
+      </div>
+
+      <footer class="footer">
+        <p>Napomena: Sadržaj poziva sadrži sve potrebne informacije za prijavu. Za dodatna pitanja koristite kontakt e-mail ili formu na sajtu.</p>
+      </footer>
+    </article>
+  </div>
+</body>
+</html>
